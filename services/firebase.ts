@@ -356,7 +356,6 @@ export const searchUsers = async (searchTerm: string): Promise<User[]> => {
       }
 
       // 2. Fallback: Email or SearchName via client-side filtering of recent users
-      // This is more robust than a single filtered query if indexes are missing
       const qFallback = query(usersRef, limit(300));
       const snapshot = await getDocs(qFallback);
       const allUsers = snapshot.docs.map(d => ({ ...d.data(), uid: d.id } as User));
@@ -476,6 +475,7 @@ export const createChat = async (participants: User[], groupName?: string): Prom
   const validParticipants = allParticipants.filter(p => p && p.uid);
   const participantIds = validParticipants.map(p => p.uid).sort();
 
+  // Strict duplications check for 1-on-1 chats
   if (participants.length === 1) {
     const chatsRef = collection(db, 'chats');
     const q = query(chatsRef, where('participants', '==', participantIds), where('isGroup', '==', false), where('communityId', '==', null));
@@ -514,8 +514,6 @@ export const subscribeToChats = (userId: string, callback: (chats: ChatRoom[]) =
   if (!db || !userId) { callback([]); return () => {}; }
   
   // ROBUST QUERY: Only filter by participants array-contains.
-  // Avoids orderBy('lastUpdated') which fails without composite index.
-  // Sorting is done client-side.
   const qSimple = query(collection(db, 'chats'), where('participants', 'array-contains', userId));
 
   return onSnapshot(qSimple, (snapshot) => {
@@ -605,7 +603,8 @@ export const createCommunity = async (name: string, description: string, color?:
     const commRef = await addDoc(collection(db, 'communities'), {
         name, description, color: color || '#B30000', createdBy: uid, ownerId: uid, members: [uid], isPublic: !!isPublic, photoURL: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`, createdAt: serverTimestamp()
     });
-    await updateDoc(doc(db, 'users', uid), { joinedCommunities: arrayUnion(commRef.id) });
+    // Use setDoc merge to guarantee this field exists even if user doc is partial
+    await setDoc(doc(db, 'users', uid), { joinedCommunities: arrayUnion(commRef.id) }, { merge: true });
     createChannel(commRef.id, 'general').catch(e => console.warn(e));
     return commRef.id;
 };
@@ -663,13 +662,17 @@ export const joinCommunity = async (communityId: string) => {
     if (!db || !auth) return;
     const uid = auth.currentUser!.uid;
     const userRef = doc(db, 'users', uid);
+    
+    // Check duplication locally first to save writes
     const userSnap = await getDoc(userRef);
     if (userSnap.exists()) {
         const userData = userSnap.data();
         if (userData.joinedCommunities && userData.joinedCommunities.includes(communityId)) return;
     }
+
+    // Use setDoc merge for robustness
     await updateDoc(doc(db, 'communities', communityId), { members: arrayUnion(uid) });
-    await updateDoc(doc(db, 'users', uid), { joinedCommunities: arrayUnion(communityId) });
+    await setDoc(userRef, { joinedCommunities: arrayUnion(communityId) }, { merge: true });
 };
 
 export const leaveCommunity = async (communityId: string) => {
@@ -681,7 +684,8 @@ export const leaveCommunity = async (communityId: string) => {
         const data = commDoc.data();
         const newMembers = (data.members as string[] || []).filter(m => m !== uid);
         await updateDoc(commRef, { members: newMembers });
-        await updateDoc(doc(db, 'users', uid), { joinedCommunities: arrayRemove(communityId) });
+        // Use setDoc merge for robustness
+        await setDoc(doc(db, 'users', uid), { joinedCommunities: arrayRemove(communityId) }, { merge: true });
     }).catch(console.error);
 }
 
