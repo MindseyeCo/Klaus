@@ -1,0 +1,8 @@
+{
+  "name": "Klaus",
+  "description": "A precision-engineered, German-themed chat application featuring real-time messaging, secure authentication, and a sleek industrial design.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

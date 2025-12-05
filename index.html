@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html lang="en" class="bg-[#0A0A0A]">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Klaus | Precision Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              klaus: {
+                red: '#B30000',
+                dark: '#0A0A0A',
+                gray: '#1F1F1F',
+                light: '#E5E5E5',
+                accent: '#CC0000'
+              }
+            },
+            fontFamily: {
+              sans: ['Inter', 'Roboto', 'sans-serif'],
+              mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+            },
+            animation: {
+              'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              'slide-in-up': 'slideInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              'fade-in': 'fadeIn 0.8s ease-out forwards',
+              'fade-scale': 'fadeScale 0.3s ease-out forwards',
+              'tech-pulse': 'techPulse 4s infinite',
+              'spin-slow': 'spin 3s linear infinite',
+              'scan': 'scan 2s linear infinite',
+              'slide-in-right': 'slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              'bounce-short': 'bounceShort 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+              'pulse-glow': 'pulseGlow 2s infinite',
+              'float-up': 'floatUp 0.5s ease-out forwards',
+              'glow-pulse': 'glowPulse 2s infinite',
+              'pop-scale': 'popScale 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+            },
+            keyframes: {
+              slideUp: {
+                '0%': { transform: 'translateY(20px)', opacity: '0' },
+                '100%': { transform: 'translateY(0)', opacity: '1' },
+              },
+              slideInUp: {
+                '0%': { transform: 'translateY(100%)', opacity: '0' },
+                '100%': { transform: 'translateY(0)', opacity: '1' },
+              },
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              fadeScale: {
+                '0%': { opacity: '0', transform: 'scale(0.95)' },
+                '100%': { opacity: '1', transform: 'scale(1)' },
+              },
+              techPulse: {
+                '0%, 100%': { opacity: '0.4' },
+                '50%': { opacity: '0.8' },
+              },
+              scan: {
+                '0%': { transform: 'translateY(-100%)' },
+                '100%': { transform: 'translateY(100%)' },
+              },
+              slideInRight: {
+                '0%': { transform: 'translateX(100%)' },
+                '100%': { transform: 'translateX(0)' },
+              },
+              bounceShort: {
+                '0%, 100%': { transform: 'scale(1)' },
+                '50%': { transform: 'scale(0.9)' },
+              },
+              pulseGlow: {
+                 '0%, 100%': { filter: 'drop-shadow(0 0 2px rgba(179, 0, 0, 0.5))' },
+                 '50%': { filter: 'drop-shadow(0 0 8px rgba(179, 0, 0, 0.8))' },
+              },
+              floatUp: {
+                '0%': { transform: 'translateY(20px)', opacity: '0' },
+                '100%': { transform: 'translateY(0)', opacity: '1' },
+              },
+              glowPulse: {
+                '0%, 100%': { boxShadow: '0 0 5px rgba(179, 0, 0, 0.2)' },
+                '50%': { boxShadow: '0 0 15px rgba(179, 0, 0, 0.6)' },
+              },
+              popScale: {
+                '0%': { transform: 'scale(1)' },
+                '50%': { transform: 'scale(1.2)' },
+                '100%': { transform: 'scale(1)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+      body { font-family: 'Inter', sans-serif; background-color: #0A0A0A; color: white; overflow: hidden; }
+      html { background-color: #0A0A0A; }
+      
+      /* Sleek Scrollbar */
+      ::-webkit-scrollbar { width: 4px; height: 4px; }
+      ::-webkit-scrollbar-track { background: #0A0A0A; }
+      ::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+      ::-webkit-scrollbar-thumb:hover { background: #B30000; }
+      
+      /* Hide scrollbar utility */
+      .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+      }
+      .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+      }
+
+      /* Scroll Snap for Nexus Reels */
+      .snap-y-mandatory {
+        scroll-snap-type: y mandatory;
+      }
+      .snap-center {
+        scroll-snap-align: center;
+      }
+
+      .clip-path-slant {
+        clip-path: polygon(0 0, 100% 0, 100% 85%, 95% 100%, 0 100%);
+      }
+      
+      .clip-path-hex {
+        clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/client": "https://aistudiocdn.com/react-dom@^19.2.0/client",
+    "react/jsx-runtime": "https://aistudiocdn.com/react@^19.2.0/jsx-runtime",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
+    "firebase/app": "https://aistudiocdn.com/firebase@^12.6.0/app",
+    "firebase/auth": "https://aistudiocdn.com/firebase@^12.6.0/auth",
+    "firebase/firestore": "https://aistudiocdn.com/firebase@^12.6.0/firestore",
+    "firebase/storage": "https://aistudiocdn.com/firebase@^12.6.0/storage",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+    "@supabase/supabase-js": "https://aistudiocdn.com/@supabase/supabase-js@^2.45.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "firebase/": "https://aistudiocdn.com/firebase@^12.6.0/"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
