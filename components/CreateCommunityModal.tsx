@@ -33,17 +33,18 @@ export const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({ onCl
     setLoading(true);
     setError(null);
     try {
+        // Enforce a strict timeout to prevent infinite "Processing"
         const createPromise = createCommunity(name, desc, selectedColor, isPublic);
         const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error("Request timed out. Check connection.")), 8000)
+            setTimeout(() => reject(new Error("Network timed out. Please try again.")), 5000)
         );
 
         const id = await Promise.race([createPromise, timeoutPromise]) as string;
+        setLoading(false); // Stop loading BEFORE closing to prevent state glitches
         onCreated(id);
     } catch (e: any) {
         console.error(e);
         setError(e.message || "Failed to initialize server.");
-    } finally {
         setLoading(false);
     }
   };
@@ -53,12 +54,17 @@ export const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({ onCl
       setLoading(true);
       setError(null);
       try {
-          await joinCommunity(joinId);
-          onCreated(joinId); // Navigate to it
+          const joinPromise = joinCommunity(joinId);
+          const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error("Connection timed out.")), 5000)
+          );
+          
+          await Promise.race([joinPromise, timeoutPromise]);
+          setLoading(false);
+          onCreated(joinId); 
       } catch (e: any) {
           console.error(e);
           setError(e.message || "Failed to join network.");
-      } finally {
           setLoading(false);
       }
   };

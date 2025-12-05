@@ -5,7 +5,7 @@ import { NexusPost, NexusCollection, NexusSearchFilters, ChatRoom } from '../typ
 import { NexusSplash } from './NexusSplash';
 import { getLocalKeepsakes, exportCollections, importCollections, checkKeepsakeExists, saveLocalKeepsake, removeLocalKeepsake } from '../services/keepsakes';
 import { VideoPlayer } from './VideoPlayer';
-import { Search, RefreshCcw, Bookmark, Share2, Heart, Film, List, BookOpen, Download, Upload, Dice5, ArrowLeft, Send } from 'lucide-react';
+import { Search, RefreshCcw, Bookmark, Share2, Heart, Film, List, BookOpen, Download, Upload, Dice5, ArrowLeft } from 'lucide-react';
 
 // --- TYPES ---
 interface NexusProps {
@@ -512,18 +512,11 @@ const NexusDetail = ({ post, onBack }: { post: NexusPost, onBack: () => void }) 
         }
     };
     
-    const handleTelegramShare = () => {
-        window.open(`https://t.me/share/url?url=${encodeURIComponent(post.externalLink || '')}&text=${encodeURIComponent(post.title)}`, '_blank');
-    }
-
     return (
         <div className="absolute inset-0 z-50 bg-[#050505] flex flex-col animate-slide-in-right">
             <div className="h-14 bg-[#0F0F0F] border-b border-gray-800 flex items-center px-4 gap-4 shrink-0">
                 <button onClick={onBack} className="text-gray-400 hover:text-white"><ArrowLeft size={20}/></button>
                 <h2 className="font-bold text-white text-sm uppercase truncate flex-1">{post.title}</h2>
-                <button onClick={handleTelegramShare} className="text-[#0088cc] hover:text-white transition-colors mr-2">
-                    <Send size={20} />
-                </button>
                 <button onClick={toggleSave} className={`${saved ? 'text-klaus-red' : 'text-gray-500'} hover:scale-110 transition-transform`}>
                     <Bookmark size={20} fill={saved ? "currentColor" : "none"} />
                 </button>

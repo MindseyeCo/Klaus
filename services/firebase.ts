@@ -441,7 +441,7 @@ export const subscribeToUserProfile = (uid: string, callback: (user: User | null
   }, (error) => callback(null));
 };
 
-export const updateUserProfile = async (uid: string, data: Partial<User> & { telegramHandle?: string }) => {
+export const updateUserProfile = async (uid: string, data: Partial<User>) => {
   if (!db || !auth) throw new Error("Firebase not initialized");
   if (data.displayName !== undefined && data.displayName.trim() === '') throw new Error("Display Name cannot be empty.");
 
@@ -699,15 +699,9 @@ export const getCommunityMembers = async (memberIds: string[]): Promise<User[]> 
     return users;
 };
 
-// ... utils (notifications, telegram, media) ...
+// ... utils (notifications, media) ...
 export const requestNotificationPermission = () => { if ('Notification' in window) Notification.requestPermission(); };
 const sendNotification = (title: string, body: string) => { if ('Notification' in window && Notification.permission === 'granted') new Notification(title, { body, icon: '/favicon.ico' }); };
-
-export const openTelegramChat = (handle: string) => {
-    if(!handle) return;
-    const cleanHandle = handle.replace('@', '').trim();
-    if(cleanHandle) window.open(`https://t.me/${cleanHandle}`, '_blank');
-};
 
 const generateKlausResponse = async (chatId: string, userText: string) => {
   if (!db) return;
@@ -733,6 +727,22 @@ export const uploadMedia = async (file: File): Promise<string> => {
   const storageRef = ref(storage, `uploads/${auth.currentUser!.uid}/${Date.now()}_${file.name}`);
   await uploadBytes(storageRef, file);
   return await getDownloadURL(storageRef);
+};
+
+export const getVideoWhisperCredentials = async () => {
+    if (!auth || !auth.currentUser) return null;
+    try {
+        const token = await auth.currentUser.getIdToken();
+        return {
+            uid: auth.currentUser.uid,
+            email: auth.currentUser.email,
+            displayName: auth.currentUser.displayName || 'User',
+            token: token
+        };
+    } catch (e) {
+        console.error("Failed to get auth token", e);
+        return null;
+    }
 };
 
 function mapFirebaseUser(u: FirebaseUser): User {

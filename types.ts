@@ -11,7 +11,6 @@ export interface User {
   isOnline?: boolean;
   about?: string;
   themeSongUrl?: string;
-  telegramHandle?: string; // Telegram Username
   joinedCommunities?: string[];
   
   // Friends System

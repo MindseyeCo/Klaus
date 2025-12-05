@@ -19,12 +19,12 @@ export const CreateChannelModal: React.FC<CreateChannelModalProps> = ({ communit
     setLoading(true);
     try {
         await createChannel(communityId, name.trim().toLowerCase().replace(/\s+/g, '-'));
-        onClose(); // Close immediately on success
     } catch (e) {
         console.error("Channel creation failed", e);
     } finally {
-        setLoading(false); 
-        onClose(); // Force close even on error/success combo to prevent hanging UI state in this version
+        // Ensure state is cleared and modal closed regardless of outcome
+        setLoading(false);
+        onClose();
     }
   };
 

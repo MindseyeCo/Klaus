@@ -4,7 +4,7 @@ import { User } from '../types';
 import { Button } from './Button';
 import { Input } from './Input';
 import { updateUserProfile, logout, deleteUserAccount, uploadProfileImage } from '../services/firebase';
-import { ArrowLeft, Save, LogOut, Trash2, AlertTriangle, CheckCircle, XCircle, Clock, Music, Camera, Link as LinkIcon, AtSign, Database, Send } from 'lucide-react';
+import { ArrowLeft, Save, LogOut, Trash2, AlertTriangle, CheckCircle, XCircle, Clock, Music, Camera, Link as LinkIcon, AtSign, Database } from 'lucide-react';
 
 interface SettingsProps {
   user: User;
@@ -21,7 +21,6 @@ export const SettingsScreen: React.FC<SettingsProps> = ({ user, onBack }) => {
   const [about, setAbout] = useState(user.about || '');
   const [themeSongUrl, setThemeSongUrl] = useState(user.themeSongUrl || '');
   const [photoURL, setPhotoURL] = useState(user.photoURL || '');
-  const [telegramHandle, setTelegramHandle] = useState(user.telegramHandle || '');
   
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -39,14 +38,12 @@ export const SettingsScreen: React.FC<SettingsProps> = ({ user, onBack }) => {
         setAbout(user.about || '');
         setThemeSongUrl(user.themeSongUrl || '');
         setPhotoURL(user.photoURL || '');
-        setTelegramHandle(user.telegramHandle || '');
         initializedRef.current = true;
     } else if (!initializedRef.current && user.displayName) {
         setDisplayName(user.displayName);
         if(user.status) setStatus(user.status);
         if(user.about) setAbout(user.about);
         setPhotoURL(user.photoURL || '');
-        setTelegramHandle(user.telegramHandle || '');
         initializedRef.current = true;
     }
   }, [user]);
@@ -67,8 +64,7 @@ export const SettingsScreen: React.FC<SettingsProps> = ({ user, onBack }) => {
         status: status, 
         statusState: statusState, 
         about,
-        themeSongUrl,
-        telegramHandle: telegramHandle.replace('@', '') // Store without @
+        themeSongUrl
       });
       
       setMessage('Profile synchronized.');
@@ -228,18 +224,6 @@ export const SettingsScreen: React.FC<SettingsProps> = ({ user, onBack }) => {
                          </div>
                     </div>
                 )}
-                
-                <div className="w-full">
-                     <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2 flex items-center gap-2">
-                         <Send size={12} /> Telegram Handle (Optional)
-                     </label>
-                     <Input 
-                        placeholder="username (without @)"
-                        value={telegramHandle}
-                        onChange={(e) => setTelegramHandle(e.target.value)}
-                        className="font-mono text-sm"
-                     />
-                </div>
 
                 <Input 
                    label="Current Status Message"

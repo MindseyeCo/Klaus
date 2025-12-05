@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { User } from '../types';
 import { getUserProfile, sendFriendRequest, acceptFriendRequest, removeFriend } from '../services/firebase';
-import { X, Music, User as UserIcon, Mail, UserPlus, UserCheck, UserMinus, MessageSquare, QrCode, Send } from 'lucide-react';
+import { X, Music, User as UserIcon, Mail, UserPlus, UserCheck, UserMinus, MessageSquare, QrCode } from 'lucide-react';
 import { getAuth } from 'firebase/auth';
 import { KlausTag } from './KlausTag';
 
@@ -139,18 +139,6 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({ userId, onCl
                 <div className="mt-4 px-6 py-2 bg-white/5 rounded-full border border-white/10 text-xs text-gray-300 z-10 max-w-[80%] text-center">
                    "{user.status}"
                 </div>
-            )}
-            
-            {/* Telegram Link */}
-            {user.telegramHandle && (
-                <a 
-                   href={`https://t.me/${user.telegramHandle}`} 
-                   target="_blank" 
-                   rel="noopener noreferrer"
-                   className="mt-3 flex items-center gap-2 text-xs font-bold text-[#0088cc] hover:text-white bg-[#0088cc]/10 hover:bg-[#0088cc]/20 px-3 py-1.5 rounded-full transition-colors z-10"
-                >
-                    <Send size={12} /> @{user.telegramHandle}
-                </a>
             )}
 
             <button 
