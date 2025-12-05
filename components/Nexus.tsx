@@ -1,6 +1,4 @@
 
-
-
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { fetchNexusPosts, fetchNexusCollections, getRandomNexusContent } from '../services/nexus';
 import { NexusPost, NexusCollection, NexusSearchFilters, ChatRoom } from '../types';
@@ -352,10 +350,9 @@ export const Nexus: React.FC<NexusProps> = ({ onBack, chats, onShareToChat, side
                 </button>
             </div>
 
-            {/* Mobile/Desktop Tab Bar - Floating Pill Design */}
-            {/* Moved to TOP on mobile to fix layout - sits just below header */}
-            <div className="absolute top-[60px] left-0 right-0 z-[40] flex justify-center py-2 bg-gradient-to-b from-[#050505] to-transparent md:relative md:top-auto md:bg-[#0F0F0F] md:border-b md:border-gray-800 shrink-0">
-                <div className="flex bg-black/80 backdrop-blur-md md:bg-[#1a1a1a] p-1 rounded-full border border-gray-700/50 shadow-2xl">
+            {/* Tabs - Sticky for both Mobile and Desktop */}
+            <div className="sticky top-0 z-[40] flex justify-center py-2 bg-[#050505]/95 backdrop-blur-sm border-b border-gray-800/50 shrink-0">
+                <div className="flex bg-black/80 md:bg-[#1a1a1a] p-1 rounded-full border border-gray-700/50 shadow-2xl">
                     {['feed', 'klips', 'library', 'collections'].map((m) => (
                         <button 
                             key={m}
@@ -381,7 +378,7 @@ export const Nexus: React.FC<NexusProps> = ({ onBack, chats, onShareToChat, side
                 
                 {/* FEED VIEW */}
                 {!loading && mode === 'feed' && (
-                    <div className="max-w-xl mx-auto py-4 px-2 pb-24 pt-16 md:pt-4">
+                    <div className="max-w-xl mx-auto py-4 px-2 pb-24">
                         {posts.map(p => <NexusFeedItem key={p.id} post={p} onClick={setDetailPost} />)}
                         {posts.length === 0 && <EmptyState />}
                         <div className="h-10 text-center text-[10px] text-gray-600 py-4 uppercase font-bold">
@@ -397,7 +394,7 @@ export const Nexus: React.FC<NexusProps> = ({ onBack, chats, onShareToChat, side
                     <div 
                         ref={reelsContainerRef} 
                         onScroll={handleScroll}
-                        className="h-full w-full overflow-y-scroll snap-y snap-mandatory bg-black pt-14 md:pt-0"
+                        className="h-full w-full overflow-y-scroll snap-y snap-mandatory bg-black"
                     >
                          {posts.map((p, idx) => (
                              <div key={p.id} data-id={p.id} className="snap-center w-full h-full">
@@ -411,7 +408,7 @@ export const Nexus: React.FC<NexusProps> = ({ onBack, chats, onShareToChat, side
 
                 {/* LIBRARY VIEW */}
                 {!loading && mode === 'library' && (
-                    <div className="max-w-5xl mx-auto p-4 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 pb-24 pt-16 md:pt-4">
+                    <div className="max-w-5xl mx-auto p-4 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 pb-24">
                         {posts.map(p => <NexusLibraryItem key={p.id} post={p} onClick={setDetailPost} />)}
                         {posts.length === 0 && <EmptyState />}
                         <div className="col-span-full text-center py-4">
@@ -424,7 +421,7 @@ export const Nexus: React.FC<NexusProps> = ({ onBack, chats, onShareToChat, side
 
                 {/* COLLECTIONS VIEW */}
                 {!loading && mode === 'collections' && (
-                    <div className="pt-16 md:pt-4">
+                    <div className="pt-4">
                         <NexusCollectionsView posts={posts} refresh={() => loadContent(1, true)} onPostClick={setDetailPost} />
                     </div>
                 )}

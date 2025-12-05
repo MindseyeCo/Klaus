@@ -315,15 +315,15 @@ export const browseUsers = async (): Promise<User[]> => {
     if (!db || !auth) return [KLAUS_USER];
     const usersRef = collection(db, 'users');
     try {
-        // Fetch up to 1000 users to ensure comprehensive directory visibility
-        const q = query(usersRef, limit(1000)); 
+        // Fetch up to 2000 users to ensure comprehensive directory visibility
+        const q = query(usersRef, limit(2000)); 
         const snapshot = await getDocs(q);
         const users = snapshot.docs.map(d => ({ ...d.data(), uid: d.id } as User));
         
         // Remove self from list but keep everyone else
         const validUsers = users.filter(u => u.uid !== auth?.currentUser?.uid);
         
-        // Basic sort by name
+        // Basic sort by name client-side to avoid index requirement errors
         validUsers.sort((a,b) => {
             const nameA = a.displayName || a.email || 'Unknown';
             const nameB = b.displayName || b.email || 'Unknown';
